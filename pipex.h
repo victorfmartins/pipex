@@ -6,7 +6,7 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 18:04:09 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/06/24 18:21:23 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/06/25 09:38:35 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdio.h>
-
-# define WINDOW_WIDTH 1200
-# define WINDOW_HEIGHT 600
 
 # define PIPEX_ERROR -1
 
