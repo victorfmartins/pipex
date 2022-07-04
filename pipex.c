@@ -6,13 +6,13 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 17:57:10 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/03 15:12:54 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/07/04 11:47:16 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./pipex.h"
 
-void close_pipes_until(int fd[][2], int n, int process_idx) //lembrar de tirar o process_idx
+void	close_pipes_until(int fd[][2], int n) //lembrar de tirar o process_idx
 {
 	int	i;
 
@@ -21,8 +21,6 @@ void close_pipes_until(int fd[][2], int n, int process_idx) //lembrar de tirar o
 	{
 		close(fd[i][0]);
 		close(fd[i][1]);
-		// printf("Child %d: close(fd[%d][0]);\n", process_idx+1, i);
-		// printf("Child %d: close(fd[%d][1]);\n", process_idx+1, i);
 		i++;
 	}
 	return ;
@@ -59,7 +57,7 @@ int	open_pipes(char **argv, int fd[][2], int qtd)
 	{
 		if (pipe(fd[i]) == -1)
 		{
-			close_pipes_until(fd, i, -1);
+			close_pipes_until(fd, i);
 			return (-1);
 		}
 		i++;
@@ -74,17 +72,13 @@ void manage_pipes(int fd[][2], int process_idx, int pipes_qtd)
 	i = 0;
 	while (i < pipes_qtd)
 	{
-		if (process_idx != 0 && i == process_idx || process_idx == 0 && i == 0){
+		if ((process_idx != 0 && i == process_idx) || (process_idx == 0 && i == 0))
 			dup2(fd[i][0], STDIN_FILENO);
-			// printf("Child %d: dup2(fd[%d][0], STDIN_FILENO);\n", process_idx+1, i);
-		}
-		if (i == process_idx + 1 || process_idx == pipes_qtd - 1 && i == 0){
+		if (i == process_idx + 1 || (process_idx == pipes_qtd - 1 && i == 0))
 			dup2(fd[i][1], STDOUT_FILENO);
-			// printf("Child %d: dup2(fd[%d][1], STDOUT_FILENO);\n", process_idx+1, i);
-		}
 		i++;
 	}
-	close_pipes_until(fd, pipes_qtd, process_idx);
+	close_pipes_until(fd, pipes_qtd);
 	return ;
 }
 
@@ -100,10 +94,11 @@ int	enter_process_op(int fd[][2], int process_idx, int process_qtd, char **argv,
 {
 	char	**args;
 	char	*cmd;
+	int		here_doc;
 	
-	// printf("\nChild %d\n", process_idx + 1);
 	manage_pipes(fd, process_idx, process_qtd);
-	args = get_cmd_args(argv[process_idx + 2]); // pode ser +3 (4) se tiver "here_doc"
+	here_doc = ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0; // +1 for LIMITER
+	args = get_cmd_args(argv[process_idx + 2 + here_doc]); // pode ser +3 (4) se tiver "here_doc"
 	cmd = ft_strjoin("/usr/bin/", args[0]);
 	execve(cmd, args, envp);
 	// exit(child_error(args, cmd));
@@ -128,7 +123,7 @@ int	pipex(int process_qtd, char **argv, char **envp)
 	int	fd[process_qtd][2];
 	int	id[process_qtd];
 	int	i;
-	
+
 	if (open_pipes(argv, fd, process_qtd) == -1)
 		return (-1);
 	i = 0;
@@ -137,14 +132,14 @@ int	pipex(int process_qtd, char **argv, char **envp)
 		id[i] = fork();
 		if (id[i] == -1)
 		{
-			close_pipes_until(fd, process_qtd, -1);
+			close_pipes_until(fd, process_qtd);
 			return (-1);
 		}
 		if (id[i] == 0)
 			enter_process_op(fd, i, process_qtd, argv, envp);
 		i++;
 	}
-	close_pipes_until(fd, process_qtd, 9);
+	close_pipes_until(fd, process_qtd);
 	wait_all_child_finish(id, process_qtd);
 	return (1);
 }
@@ -166,7 +161,7 @@ int	main(int argc, char **argv, char **envp)
 	// int	i;
 
 	process_qtd = get_command_qtd(argc, argv);
-	printf("%d\n", process_qtd);
+	// printf("%d\n", process_qtd);
 	if (process_qtd == -1)
 		return (-1);
 	// if (!is_valid_commands())
