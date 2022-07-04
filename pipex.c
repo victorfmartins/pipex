@@ -6,85 +6,181 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 17:57:10 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/06/25 09:38:47 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/07/03 15:12:54 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./pipex.h"
-#include<sys/wait.h>
 
-void test_fork()
+void close_pipes_until(int fd[][2], int n, int process_idx) //lembrar de tirar o process_idx
 {
-    int id  = fork(); // child id is zero and parent id is bigger then zero
-    int res = 0;
-    if (id == 0) {
-        printf("Child processes says:\n");
-    } else {
-        sleep(1); // sleep 1 s
-        printf("Parent processes says:\n");
-        res = wait(NULL);
-    }
-    printf("Child ID %d, parent ID %d\n", getpid(), getppid());
-    if (id == 0) {
-        printf("Child process received process id %d from wait\n", res);
-    } else {
-        printf("Parent process received process id %d from wait\n", res);
-    }
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		close(fd[i][0]);
+		close(fd[i][1]);
+		// printf("Child %d: close(fd[%d][0]);\n", process_idx+1, i);
+		// printf("Child %d: close(fd[%d][1]);\n", process_idx+1, i);
+		i++;
+	}
+	return ;
 }
 
-int    test_pipe()
+int	get_files_fds(char **argv, int fd[][2], int qtd)
 {
-    int fd[2];
-    // fd[0] read
-    // fd[1] write
-    if (pipe(fd) == -1)
-    {
-        printf("an error ocurred with opening pipe\n");
-        return (1);
-    }
-    int id = fork();
-    if (id == -1)
-    {
-        printf("An eror ocurred with fork\n");
-        return (2);
-    }
-    if (id == 0)
-    {
-        close(fd[0]);
-        int x;
-        printf("Input number: ");
-        scanf("%d", &x);
-        if (write(fd[1], &x, sizeof(int)) == -1)
-        {
-            printf("An error ocurred with writing to the pipe\n");
-            return (3);
-        }
-        close(fd[1]);
-    } else {
-        close(fd[1]);
-        int y;
-        if (read(fd[0], &y, sizeof(int)) == -1)
-        {
-            printf("An error ocurred with reading from pipe\n");
-            return (4);
-        }
-        close(fd[0]);
-        printf("Got from child process %d\n", y);
-    }
-    return (0);
+	int	here_doc;
+
+	here_doc = ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0; // +1 for LIMITER
+	fd[0][0] = open(argv[1 + here_doc], O_RDONLY);
+	if (fd[0][0] == -1)
+		return (-1);
+	if (here_doc)
+		fd[0][1] = open(argv[qtd + 2 + here_doc], O_APPEND | O_CREAT | O_WRONLY , 0664);
+	else
+		fd[0][1] = open(argv[qtd + 2 + here_doc], O_TRUNC | O_CREAT | O_WRONLY , 0644);
+	if (fd[0][1] == -1)
+	{
+		close(fd[0][0]);
+		return (-1);
+	}
+	return (1);
 }
 
-int main(int argc, char **argv)
+int	open_pipes(char **argv, int fd[][2], int qtd)
 {
-    printf("Program name: %s\n", argv[argc - 1] + 2);
-    printf("\n");
-    //test_fork();
-    printf("\n");
-    if (test_pipe() > 1)
-    {
-        printf("An error has ocurred in the pipe function\n");
-        return (PIPEX_ERROR);
-    }
-    printf("\n");
-    return (0);
+	int	i;
+
+	if (get_files_fds(argv, fd, qtd) == -1)
+		return (-1);
+	i = 1;
+	while (i < qtd)
+	{
+		if (pipe(fd[i]) == -1)
+		{
+			close_pipes_until(fd, i, -1);
+			return (-1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+void manage_pipes(int fd[][2], int process_idx, int pipes_qtd)
+{
+	int	i;
+
+	i = 0;
+	while (i < pipes_qtd)
+	{
+		if (process_idx != 0 && i == process_idx || process_idx == 0 && i == 0){
+			dup2(fd[i][0], STDIN_FILENO);
+			// printf("Child %d: dup2(fd[%d][0], STDIN_FILENO);\n", process_idx+1, i);
+		}
+		if (i == process_idx + 1 || process_idx == pipes_qtd - 1 && i == 0){
+			dup2(fd[i][1], STDOUT_FILENO);
+			// printf("Child %d: dup2(fd[%d][1], STDOUT_FILENO);\n", process_idx+1, i);
+		}
+		i++;
+	}
+	close_pipes_until(fd, pipes_qtd, process_idx);
+	return ;
+}
+
+char	**get_cmd_args(char *argv)
+{
+	char	**args;
+
+	args = ft_split(argv, ' ');
+	return (args);
+}
+
+int	enter_process_op(int fd[][2], int process_idx, int process_qtd, char **argv, char **envp)
+{
+	char	**args;
+	char	*cmd;
+	
+	// printf("\nChild %d\n", process_idx + 1);
+	manage_pipes(fd, process_idx, process_qtd);
+	args = get_cmd_args(argv[process_idx + 2]); // pode ser +3 (4) se tiver "here_doc"
+	cmd = ft_strjoin("/usr/bin/", args[0]);
+	execve(cmd, args, envp);
+	// exit(child_error(args, cmd));
+	return (1);
+}
+
+void	wait_all_child_finish(int id[], int process_qtd)
+{
+	int	i;
+
+	i = 0;
+	while (i < process_qtd)
+	{
+		waitpid(id[i], NULL, 0);
+		i++;
+	}
+	return ;
+}
+
+int	pipex(int process_qtd, char **argv, char **envp)
+{
+	int	fd[process_qtd][2];
+	int	id[process_qtd];
+	int	i;
+	
+	if (open_pipes(argv, fd, process_qtd) == -1)
+		return (-1);
+	i = 0;
+	while (i < process_qtd)
+	{
+		id[i] = fork();
+		if (id[i] == -1)
+		{
+			close_pipes_until(fd, process_qtd, -1);
+			return (-1);
+		}
+		if (id[i] == 0)
+			enter_process_op(fd, i, process_qtd, argv, envp);
+		i++;
+	}
+	close_pipes_until(fd, process_qtd, 9);
+	wait_all_child_finish(id, process_qtd);
+	return (1);
+}
+
+int	get_command_qtd(int argc, char **argv)
+{
+	if (argc < 5)
+		return (-1);
+	if (argc > 5 && ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
+		return (argc - 4);
+	else
+		return (argc - 3);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	int	process_qtd;
+	// char	**args;
+	// int	i;
+
+	process_qtd = get_command_qtd(argc, argv);
+	printf("%d\n", process_qtd);
+	if (process_qtd == -1)
+		return (-1);
+	// if (!is_valid_commands())
+		// return err
+	if (pipex(process_qtd, argv, envp) == -1)
+		return (-1);
+	// args = get_cmd_args(argv[0 + 2]);
+	// i = 0;
+	// while (args && args[i])
+	// {
+	// 	printf("%s ", args[i]);
+	// 	i++;
+	// }
+	// printf("\n");
+	write(1, "Success\n", 8);
+	return (0);
 }

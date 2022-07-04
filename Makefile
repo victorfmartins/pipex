@@ -6,7 +6,7 @@
 #    By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/24 18:09:55 by vfranco-          #+#    #+#              #
-#    Updated: 2022/06/24 18:25:03 by vfranco-         ###   ########.fr        #
+#    Updated: 2022/07/04 11:07:38 by vfranco-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FILES_PATH	=	.
 FILES 		=	pipex.c
 OBJS_PATH	=	objs
 OBJS 		=	$(addprefix $(OBJS_PATH)/,$(notdir $(FILES:.c=.o)))
-FLAGS 		= 	-Wall -Wextra -Werror
+FLAGS 		= 	
 LIBFT_PATH	= 	.dependencies/libft
 LIBFT		=	$(LIBFT_PATH)/libft.a
 GNL_PATH	= 	.dependencies/gnl
@@ -43,6 +43,8 @@ $(GNL):
 				make -C $(GNL_PATH)
 				
 clean:
+				make clean -C $(LIBFT_PATH)
+				make clean -C $(GNL_PATH)
 				$(RM) $(OBJS)
 
 fclean:		clean
