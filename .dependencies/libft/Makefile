@@ -6,7 +6,7 @@
 #    By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/30 20:47:17 by vfranco-          #+#    #+#              #
-#    Updated: 2022/06/13 13:59:35 by vfranco-         ###   ########.fr        #
+#    Updated: 2022/07/04 15:30:39 by vfranco-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ FILES		=	ft_isalpha.c \
 				ft_substr.c \
 				ft_strjoin.c \
 				ft_strtrim.c \
+				ft_strtrimc.c \
 				ft_itoa.c \
 				ft_putstr_fd.c \
 				ft_putnbr_fd.c \

@@ -6,11 +6,13 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:20:25 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/06/13 14:59:35 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/07/05 12:21:08 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+char	*ft_strtrimc(char const *s, char c);
 
 static void	ft_matrix(char **arr, char *cpy, char c, int counti)
 {
@@ -35,21 +37,6 @@ static void	ft_matrix(char **arr, char *cpy, char c, int counti)
 		i++;
 	}
 	arr[i] = NULL;
-}
-
-static char	*ft_strtrimc(char const *s, char c)
-{
-	char	*set;
-	char	*strtrimed;
-
-	set = malloc(sizeof(char) * 2);
-	if (!set)
-		return (NULL);
-	*set = c;
-	*(set + 1) = '\0';
-	strtrimed = ft_strtrim(s, set);
-	free(set);
-	return (strtrimed);
 }
 
 char	**ft_split(char const *s, char c)

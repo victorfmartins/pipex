@@ -6,14 +6,15 @@
 #    By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/24 18:09:55 by vfranco-          #+#    #+#              #
-#    Updated: 2022/07/04 11:45:23 by vfranco-         ###   ########.fr        #
+#    Updated: 2022/07/05 10:58:37 by vfranco-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	pipex
 CC			=	clang
 FILES_PATH	=	.
-FILES		=	pipex.c
+FILES		=	pipex.c \
+				ft_split_pass.c
 OBJS_PATH	=	objs
 OBJS		=	$(addprefix $(OBJS_PATH)/,$(notdir $(FILES:.c=.o)))
 FLAGS		=	-Wall -Wextra -Werror

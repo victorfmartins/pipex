@@ -6,7 +6,7 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 18:04:09 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/02 11:03:16 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:54:55 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 // 	int		*fd[2];
 // }	t_pipex;
 
-int	main(int argc, char **argv, char **envp);
+int		main(int argc, char **argv, char **envp);
+char	**ft_split_pass(char const *s, char c, char l);
 
 #endif

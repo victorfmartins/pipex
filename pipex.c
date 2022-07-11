@@ -6,7 +6,7 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 17:57:10 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/04 11:47:16 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:02:46 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,6 @@ void manage_pipes(int fd[][2], int process_idx, int pipes_qtd)
 	return ;
 }
 
-char	**get_cmd_args(char *argv)
-{
-	char	**args;
-
-	args = ft_split(argv, ' ');
-	return (args);
-}
-
 int	enter_process_op(int fd[][2], int process_idx, int process_qtd, char **argv, char **envp)
 {
 	char	**args;
@@ -98,7 +90,7 @@ int	enter_process_op(int fd[][2], int process_idx, int process_qtd, char **argv,
 	
 	manage_pipes(fd, process_idx, process_qtd);
 	here_doc = ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0; // +1 for LIMITER
-	args = get_cmd_args(argv[process_idx + 2 + here_doc]); // pode ser +3 (4) se tiver "here_doc"
+	args = ft_split_pass(argv[process_idx + 2 + here_doc], ' ', '\''); // pode ser +3 (4) se tiver "here_doc"
 	cmd = ft_strjoin("/usr/bin/", args[0]);
 	execve(cmd, args, envp);
 	// exit(child_error(args, cmd));

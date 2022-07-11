@@ -6,7 +6,7 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 12:38:05 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/10 16:46:31 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/07/10 20:58:09 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,52 @@ static size_t	count_words(char *str, char c, char l)
 	{
 		if (str[i] == l)
 		{
-			while (str[i + 1] && str[i + 1] != l)
-				i++;
 			i++;
+			while (!(!str[i] || (str[i] == l && (str[i + 1] == '\0' || str[i++ + 1] == c))))
+				i++;
 		}
 		if (str[i] == c)
 		{
 			while (str[i + 1] == c)
 				i++;
 			words_qtd++;
+			i++;
 		}
-		i++;
+		if (str[i] != l)
+			while(str[i] && str[i] != c)
+				i++;
 	}
 	return (words_qtd);
 }
 
-static size_t	word_lenght(const char *str, char c, char l)
+
+static size_t	word_lenght(char *str, char c, char l)
+{
+	size_t	i;
+	
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == l)
+		{
+			i++;
+			while (!(!str[i] || (str[i] == l && (str[i + 1] == '\0' || str[i++ + 1] == c))))
+				i++;
+		}
+		if (str[i] == c)
+		{
+			while (str[i + 1] == c)
+				i++;
+			break;
+		}
+		if (str[i] != l)
+			while(str[i] && str[i] != c)
+				i++;
+	}
+	return (i);
+}
+
+static size_t	word_lenght2(const char *str, char c, char l)
 {
 	size_t	i;
 
@@ -49,11 +79,11 @@ static size_t	word_lenght(const char *str, char c, char l)
 	{
 		if (str[i] == c || str[i] == '\0')
 			return (i);
-		if (str[i] == l)
+		if (i == 0 && str[i] == l)
 		{
-			while (str[i + 1] && str[i + 1] != l)
-				i++;
 			i++;
+			while (!(!str[i] || (str[i] == l && (str[i + 1] == '\0' || str[i++ + 1] == c))))
+				i++;
 		}
 		i++;
 	}
@@ -85,7 +115,10 @@ static void	build_arr(char ***arr, char *cpy, char c, char l)
 		(*arr)[word] = malloc(sizeof(char) * (word_len + 1));
 		if (!(*arr)[word])
 			return (free_until((*arr), word - 1));
-		ft_strlcpy((*arr)[word], cpy, word_len + 1);
+		if (*cpy == '\'' && *(cpy + word_len - 1) == '\'')
+			ft_strlcpy((*arr)[word], cpy + 1, word_len - 1);
+		else
+			ft_strlcpy((*arr)[word], cpy, word_len + 1);
 		cpy = cpy + word_len;
 		while (cpy && *cpy == c)
 			cpy++;
@@ -108,17 +141,17 @@ char	**ft_split_pass(char const *s, char c, char l)
 	return (arr);
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char	**str;
-// 	int		i;
+int	main(int argc, char **argv, char **envp)
+{
+	char	**str;
+	int		i;
 
-// 	str = ft_split_pass(argv[1], ' ', '\'');
-// 	i = 0;
-// 	while (str && str[i])
-// 	{
-// 		printf("Word[%d]: %s\n", i, str[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
+	str = ft_split_pass(argv[1], ' ', '\'');
+	i = 0;
+	while (str && str[i])
+	{
+		printf("Word[%d]: %s\n", i, str[i]);
+		i++;
+	}
+	return (0);
+}
