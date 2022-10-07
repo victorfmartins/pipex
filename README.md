@@ -1,7 +1,5 @@
 # pipex
-This project is in the works
-
-pipex is about reproducing shell behaviors like redirections and pipes.
+Pipex is about reproducing shell behaviors like redirections and pipes.
 
 ### What is the fdf project?
 pipex is the 6th project at [École 42](https://www.42sp.org.br/). It intends to devolop student skills in Imperative programming, Unix, and logic.
