@@ -6,7 +6,7 @@
 #    By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/24 18:09:55 by vfranco-          #+#    #+#              #
-#    Updated: 2022/07/05 10:58:37 by vfranco-         ###   ########.fr        #
+#    Updated: 2022/07/11 09:47:22 by vfranco-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME		=	pipex
 CC			=	clang
 FILES_PATH	=	.
 FILES		=	pipex.c \
-				ft_split_pass.c
+				utils.c \
+				ft_split_pass.c \
+				split_utils.c
 OBJS_PATH	=	objs
 OBJS		=	$(addprefix $(OBJS_PATH)/,$(notdir $(FILES:.c=.o)))
 FLAGS		=	-Wall -Wextra -Werror
@@ -33,7 +35,7 @@ $(NAME):	$(OBJS) $(LIBFT)
 				$(CC) $(FLAGS) $(OBJS) $(LIBFT) -o pipex
 
 $(OBJS_PATH)/%.o:	$(FILES_PATH)/%.c
-				$(CC) -c $(FLAGS) $< -o $(addsuffix .o, $(OBJS_PATH)/$(basename $(@F)))
+				$(CC) -c $(FLAGS)  $< -o $(addsuffix .o, $(OBJS_PATH)/$(basename $(@F)))
 
 $(LIBFT):
 				make -C $(LIBFT_PATH)
