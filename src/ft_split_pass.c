@@ -6,11 +6,11 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 12:38:05 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 16:56:02 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/07 17:21:21 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/split_pass.h"
+#include "../includes/split_pass.h"
 
 static void	build_word(char ***arr, char **cpy, int word, int word_len)
 {
