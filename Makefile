@@ -6,7 +6,7 @@
 #    By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/24 18:09:55 by vfranco-          #+#    #+#              #
-#    Updated: 2022/10/07 18:34:04 by vfranco-         ###   ########.fr        #
+#    Updated: 2022/10/07 16:42:53 by vfranco-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME		=	pipex
 CC			=	clang
 FILES_PATH	=	src
 FILES		=	pipex.c \
-				utils.c \
+				pipes.c \
+				processes.c \
 				ft_split_pass.c \
 				split_utils.c
 OBJS_PATH	=	objs

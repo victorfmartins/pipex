@@ -6,11 +6,11 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 09:36:08 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 18:36:47 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/07 16:55:44 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+# include "../includes/split_utils.h"
 
 static void	pass_l(char **str, char c, char l, size_t *i)
 {

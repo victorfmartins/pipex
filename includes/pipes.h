@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipes.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 18:04:09 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 16:56:50 by vfranco-         ###   ########.fr       */
+/*   Created: 2022/10/07 16:17:20 by vfranco-          #+#    #+#             */
+/*   Updated: 2022/10/07 16:58:46 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPES_H
+# define PIPES_H
 
-# include "../includes/pipes.h"
-# include "../includes/processes.h"
-# include "../includes/split_pass.h"
-# include "../includes/split_utils.h"
-# include "../.dependencies/libft/libft.h"
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <stdlib.h>
 
-int		main(int argc, char **argv, char **envp);
+void	close_pipes_until(int fd[][2], int n);
+int		open_pipes(int argc, char **argv, int fd[][2]);
+void	manage_pipes(int fd[][2], int process_idx, int pipes_qtd);
 
 #endif

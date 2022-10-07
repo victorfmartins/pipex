@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   split_pass.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 18:04:09 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 16:56:50 by vfranco-         ###   ########.fr       */
+/*   Created: 2022/10/07 16:45:14 by vfranco-          #+#    #+#             */
+/*   Updated: 2022/10/07 16:52:58 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef SPLIT_PASS_H
+# define SPLIT_PASS_H
 
-# include "../includes/pipes.h"
-# include "../includes/processes.h"
-# include "../includes/split_pass.h"
 # include "../includes/split_utils.h"
 # include "../.dependencies/libft/libft.h"
 
-int		main(int argc, char **argv, char **envp);
+char	**ft_split_pass(char const *s, char c, char l);
 
 #endif

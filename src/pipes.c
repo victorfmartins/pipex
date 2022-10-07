@@ -1,16 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/11 09:23:38 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 18:36:50 by vfranco-         ###   ########.fr       */
+/*   Created: 2022/10/07 16:00:42 by vfranco-          #+#    #+#             */
+/*   Updated: 2022/10/07 16:33:37 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipes.h"
+
+static int	get_files_fds(int argc, char **argv, int fd[][2])
+{
+	fd[0][0] = open(argv[1], O_RDONLY);
+	if (fd[0][0] == -1)
+		perror(argv[1]);
+	fd[0][1] = open(argv[4], O_TRUNC | O_CREAT | O_WRONLY, 0644);
+	if (fd[0][1] == -1)
+		perror(argv[argc - 1]);
+	return (1);
+}
 
 void	close_pipes_until(int fd[][2], int n)
 {
@@ -26,45 +37,23 @@ void	close_pipes_until(int fd[][2], int n)
 	return ;
 }
 
-void	free_args(char ***args, char **cmd)
+int	open_pipes(int argc, char **argv, int fd[][2])
 {
 	int	i;
 
-	i = 0;
-	while ((*args)[i])
-		free((*args)[i++]);
-	free(*args);
-	free(*cmd);
-}
-
-int	process_error(char ***args, char **cmd)
-{
-	if (!(*args)[0])
+	get_files_fds(argc, argv, fd);
+	i = 1;
+	while (i < 2)
 	{
-		write(2, "pipex: ", 7);
-		ft_putstr_fd("", 2);
-		write(2, ": command not found\n", 20);
-		free_args(args, cmd);
-		return (127);
+		if (pipe(fd[i]) == -1)
+		{
+			close_pipes_until(fd, i);
+			perror("");
+			return (-1);
+		}
+		i++;
 	}
-	else if (access(*cmd, F_OK) == -1)
-	{
-		write(2, "pipex: ", 7);
-		ft_putstr_fd((*args)[0], 2);
-		write(2, ": command not found\n", 20);
-		free_args(args, cmd);
-		return (127);
-	}
-	else
-		perror("pipex");
-	free_args(args, cmd);
-	return (1);
-}
-
-void	wait_all_child_finish(int id[], int *status)
-{
-	waitpid(id[0], status, 0);
-	waitpid(id[1], status, 0);
+	return (0);
 }
 
 void	manage_pipes(int fd[][2], int process, int pipes_qtd)
