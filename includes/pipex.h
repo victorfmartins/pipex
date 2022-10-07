@@ -6,7 +6,7 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 18:04:09 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/11 09:49:35 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/07 18:36:10 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-# include "./.dependencies/libft/libft.h"
+# include "../.dependencies/libft/libft.h"
 
 int		main(int argc, char **argv, char **envp);
 char	**ft_split_pass(char const *s, char c, char l);

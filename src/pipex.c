@@ -6,11 +6,11 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 17:57:10 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/11 10:30:44 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/07 18:36:42 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
+#include "../includes/pipex.h"
 
 int	get_files_fds(int argc, char **argv, int fd[][2])
 {

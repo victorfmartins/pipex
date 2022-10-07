@@ -6,11 +6,11 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 09:23:38 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/07/11 09:31:32 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/07 18:36:50 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
+#include "../includes/pipex.h"
 
 void	close_pipes_until(int fd[][2], int n)
 {
