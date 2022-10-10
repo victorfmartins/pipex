@@ -6,7 +6,7 @@
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 16:00:42 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 16:33:37 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/10 13:21:54 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	get_files_fds(int argc, char **argv, int fd[][2])
 	fd[0][0] = open(argv[1], O_RDONLY);
 	if (fd[0][0] == -1)
 		perror(argv[1]);
-	fd[0][1] = open(argv[4], O_TRUNC | O_CREAT | O_WRONLY, 0644);
+	fd[0][1] = open(argv[argc - 1], O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	if (fd[0][1] == -1)
 		perror(argv[argc - 1]);
 	return (1);
@@ -43,9 +43,9 @@ int	open_pipes(int argc, char **argv, int fd[][2])
 
 	get_files_fds(argc, argv, fd);
 	i = 1;
-	while (i < 2)
+	while (i < argc - 3)
 	{
-		if (pipe(fd[i]) == -1)
+		if (pipe(fd[i]) == -1) // return the fd[i][0] (read) and fd[i][1] (write)
 		{
 			close_pipes_until(fd, i);
 			perror("");

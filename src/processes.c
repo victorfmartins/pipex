@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   processors.c                                       :+:      :+:    :+:   */
+/*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfranco- <vfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 16:01:50 by vfranco-          #+#    #+#             */
-/*   Updated: 2022/10/07 16:32:20 by vfranco-         ###   ########.fr       */
+/*   Updated: 2022/10/10 13:14:10 by vfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static void	free_args(char ***args, char **cmd)
 	free(*cmd);
 }
 
-int	enter_process_op(int fd[][2], int process_idx, char **argv, char **envp)
+int	enter_process_op(int fd[][2], int process_idx, char **argv, char **envp, int connections)
 {
 	char	**args;
 	char	*cmd;
 
-	manage_pipes(fd, process_idx, 2);
-	args = ft_split_pass(argv[process_idx + 2], ' ', '\'');
+	manage_pipes(fd, process_idx, connections);
+	args = ft_split_pass(argv[process_idx + 2], ' ', '\''); //here we need the parsing to get the rigth cmd and argments
 	cmd = ft_strjoin("/usr/bin/", args[0]);
 	execve(cmd, args, envp);
 	exit(process_error(&args, &cmd));
@@ -60,8 +60,14 @@ int	process_error(char ***args, char **cmd)
 	return (1);
 }
 
-void	wait_all_child_finish(int id[], int *status)
+void	wait_all_child_finish(int id[], int child_qtd, int *status)
 {
-	waitpid(id[0], status, 0);
-	waitpid(id[1], status, 0);
+	int	i;
+
+	i = 0;
+	while (i < child_qtd)
+	{
+		waitpid(id[i], status, 0);
+		i++;
+	}
 }
